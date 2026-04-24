@@ -28,10 +28,13 @@ async function startServer() {
   // API Routes
   app.post('/api/chat', async (req, res) => {
     try {
-      const { messages, vehicleInfo, destination } = req.body;
+      const { messages, vehicleInfo, pickup, dropoff, initialFare } = req.body;
       const groq = getGroq();
 
-      const systemPrompt = `You are a local Bangladeshi ride-sharing driver of a ${vehicleInfo.type}. The user wants to go to ${destination}. The standard fare is 150 BDT, but you demand 250 BDT because of heavy traffic in Dhaka.
+      const baseFare = Number(initialFare) || 150;
+      const demandFare = baseFare + 80;
+
+      const systemPrompt = `You are a local Bangladeshi ride-sharing driver of a ${vehicleInfo.type}. The user wants to go from ${pickup} to ${dropoff}. The base fare shown in the app is ${baseFare} BDT, but you demand at least ${demandFare} BDT because of heavy traffic in Dhaka.
 Respond naturally in a mix of Bangla, English, and Banglish (e.g., 'Bhai, ekhon onek jam. Varatato ektu baraya dite hobe.').
 Rules:
 1. NEVER accept the first price. Create intentional friction.
@@ -45,7 +48,7 @@ Rules:
           { role: 'system', content: systemPrompt },
           ...messages,
         ],
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
       });
 
       res.json({ content: completion.choices[0]?.message?.content || '' });

@@ -33,11 +33,19 @@ export default function App() {
   const MIRPUR_1: [number, number] = [23.7956, 90.3537];
   const [vehicles, setVehicles] = useState<Vehicle[]>(() => generateVehicles(MIRPUR_1));
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
-  const [destination, setDestination] = useState('Mirpur-1 to BUET');
+  const [pickup, setPickup] = useState('Dhanmondi, Dhaka');
+  const [dropoff, setDropoff] = useState('Mirpur-1 to BUET');
   const [state, setState] = useState<AppState>('IDLE');
   const [dealAmount, setDealAmount] = useState<string | null>(null);
+  const [initialFare, setInitialFare] = useState(200);
 
   // Live Movement Simulation
+  useEffect(() => {
+    if (state === 'IDLE') {
+      setInitialFare(150 + Math.floor(Math.random() * 80));
+    }
+  }, [state]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setVehicles((prev) =>
@@ -77,7 +85,7 @@ export default function App() {
   };
 
   return (
-    <main className="h-screen w-full bg-black relative overflow-hidden font-sans">
+    <main className="h-screen w-full bg-black relative overflow-hidden font-sans text-[#fafafa]">
       {/* Brand Overlay */}
       <nav className="absolute top-0 left-0 right-0 z-20 p-4 md:p-8 flex justify-between items-center pointer-events-none">
         <div className="flex items-center gap-3 pointer-events-auto">
@@ -98,7 +106,7 @@ export default function App() {
         </div>
         <div className="flex gap-2 md:gap-4 pointer-events-auto">
           <div className="status-pill backdrop-blur-md border-white/5">
-            Dhanmondi, Dhaka
+            {pickup.split(',')[0]}
           </div>
           <div className="status-pill backdrop-blur-md border-amber-400/30 text-amber-400 hidden md:block">
             Live Traffic: High
@@ -145,20 +153,20 @@ export default function App() {
                         <User size={28} />
                       </div>
                       <div>
-                        <h2 className="text-xl font-bold">{selectedVehicle.driver.name}</h2>
+                        <h2 className="text-xl font-bold text-white">{selectedVehicle.driver.name}</h2>
                         <p className="text-sm text-zinc-500 font-medium">
                           {selectedVehicle.driver.model} • {selectedVehicle.type}
                         </p>
                         <div className="flex items-center gap-1.5 mt-1">
-                          <Star size={14} className="fill-yellow-500 text-yellow-500" />
-                          <span className="text-xs font-bold">{selectedVehicle.driver.rating}</span>
+                          <Star size={14} className="fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-bold text-white">{selectedVehicle.driver.rating}</span>
                           <span className="text-[10px] text-zinc-600 bg-zinc-900 px-1.5 py-0.5 rounded ml-1">
                             {selectedVehicle.driver.license}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <button onClick={closeBottomSheet} className="p-2 bg-zinc-900 rounded-full text-zinc-500">
+                    <button onClick={closeBottomSheet} className="p-2 bg-zinc-900 rounded-full text-zinc-500 pointer-events-auto">
                       <X size={18} />
                     </button>
                   </div>
@@ -166,26 +174,43 @@ export default function App() {
                     <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-sm">
                       <div className="flex justify-between items-center mb-1 text-zinc-500 text-xs">
                         <span>Route</span>
-                        <span className="text-white">Mirpur-1 → BUET</span>
+                        <span className="text-white">{pickup.split(',')[0]} → {dropoff.split(' ')[0]}</span>
                       </div>
                       <div className="flex justify-between items-center text-zinc-500 text-xs">
                         <span>Initial Fare</span>
-                        <span className="text-white font-bold">250 BDT</span>
+                        <span className="text-white font-bold">{initialFare} BDT</span>
                       </div>
                     </div>
 
-                    <div className="bg-zinc-900/40 p-4 rounded-3xl border border-white/5 backdrop-blur-sm">
-                      <label className="text-[10px] uppercase font-black text-zinc-500 mb-2 block tracking-[0.2em]">
-                        Your Destination
-                      </label>
-                      <div className="flex items-center gap-3">
-                        <MapPin size={18} className="text-amber-400" />
-                        <input
-                          value={destination}
-                          onChange={(e) => setDestination(e.target.value)}
-                          className="bg-transparent border-none text-white font-semibold focus:ring-0 p-0 w-full text-sm"
-                          placeholder="Where are you going?"
-                        />
+                    <div className="space-y-3">
+                      <div className="bg-zinc-900/40 p-4 rounded-3xl border border-white/5 backdrop-blur-sm">
+                        <label className="text-[10px] uppercase font-black text-zinc-500 mb-1 block tracking-[0.2em]">
+                          Pickup Location
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          <input
+                            value={pickup}
+                            onChange={(e) => setPickup(e.target.value)}
+                            className="bg-transparent border-none text-white font-semibold focus:ring-0 p-0 w-full text-sm"
+                            placeholder="Where are you?"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="bg-zinc-900/40 p-4 rounded-3xl border border-white/5 backdrop-blur-sm">
+                        <label className="text-[10px] uppercase font-black text-zinc-500 mb-1 block tracking-[0.2em]">
+                          Your Destination
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <MapPin size={18} className="text-amber-400" />
+                          <input
+                            value={dropoff}
+                            onChange={(e) => setDropoff(e.target.value)}
+                            className="bg-transparent border-none text-white font-semibold focus:ring-0 p-0 w-full text-sm"
+                            placeholder="Where are you going?"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -208,11 +233,11 @@ export default function App() {
                       className="absolute inset-0 bg-yellow-500/20 rounded-full"
                     />
                     <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 relative z-10">
-                      <Navigation className="text-yellow-500 animate-pulse" size={32} />
+                      <Navigation className="text-amber-400 animate-pulse" size={32} />
                     </div>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-bold">Calling Mama...</h3>
+                    <h3 className="text-xl font-bold text-white">Calling Mama...</h3>
                     <p className="text-zinc-500 text-sm">Asking {selectedVehicle.driver.name} to accept.</p>
                   </div>
                 </div>
@@ -224,7 +249,7 @@ export default function App() {
                     <AlertCircle className="text-red-500" size={32} />
                   </div>
                   <div className="text-center px-8">
-                    <h3 className="text-xl font-bold">Mama jabe na.</h3>
+                    <h3 className="text-xl font-bold text-white">Mama jabe na.</h3>
                     <p className="text-zinc-500 text-sm">Driver refused to go. Trying to find another vehicle soon...</p>
                   </div>
                 </div>
@@ -236,15 +261,15 @@ export default function App() {
                     <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20 text-green-500 mb-4">
                       <BadgeCheck size={32} />
                     </div>
-                    <h3 className="text-2xl font-black italic">MAMA RAJI!</h3>
+                    <h3 className="text-2xl font-black italic text-white uppercase italic">MAMA RAJI!</h3>
                     <p className="text-zinc-400 text-sm">Driver arrived. Now for the ritual.</p>
                   </div>
 
-                  <div className="bg-yellow-500/10 border border-yellow-500/20 p-6 rounded-[2rem] text-center">
-                    <p className="text-yellow-500 text-sm font-bold uppercase tracking-widest mb-4">Initial Quote: 250 BDT</p>
+                  <div className="bg-amber-400/10 border border-amber-400/20 p-6 rounded-[2rem] text-center">
+                    <p className="text-amber-400 text-sm font-bold uppercase tracking-widest mb-4">Initial Quote: {initialFare + 80} BDT</p>
                     <button
                       onClick={() => setState('BARGAINING')}
-                      className="w-full bg-yellow-500 text-black font-black py-5 rounded-2xl flex items-center justify-center gap-2 text-xl tracking-tighter"
+                      className="w-full bg-amber-400 text-black font-black py-5 rounded-2xl flex items-center justify-center gap-2 text-xl tracking-tighter shadow-lg"
                     >
                       Bargain with Mama
                     </button>
@@ -260,7 +285,9 @@ export default function App() {
         {state === 'BARGAINING' && selectedVehicle && (
           <Chat
             vehicle={selectedVehicle}
-            destination={destination}
+            pickup={pickup}
+            dropoff={dropoff}
+            initialFare={initialFare}
             onDealDone={(amount) => {
               setDealAmount(amount);
               setState('FINISHED');

@@ -10,11 +10,13 @@ interface Message {
 
 interface ChatProps {
   vehicle: Vehicle;
-  destination: string;
+  pickup: string;
+  dropoff: string;
+  initialFare: number;
   onDealDone: (amount: string) => void;
 }
 
-export default function Chat({ vehicle, destination, onDealDone }: ChatProps) {
+export default function Chat({ vehicle, pickup, dropoff, initialFare, onDealDone }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,7 +44,9 @@ export default function Chat({ vehicle, destination, onDealDone }: ChatProps) {
         body: JSON.stringify({
           messages: [...messages, userMessage],
           vehicleInfo: vehicle,
-          destination
+          pickup,
+          dropoff,
+          initialFare
         }),
       });
 
