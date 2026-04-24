@@ -30,17 +30,28 @@ interface MapProps {
   onVehicleClick: (vehicle: Vehicle) => void;
 }
 
+function MapController() {
+  const map = useMap();
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 250);
+  }, [map]);
+  return null;
+}
+
 export default function Map({ vehicles, onVehicleClick }: MapProps) {
-  const dhaka: [number, number] = [23.8103, 90.4125];
+  const MIRPUR_1: [number, number] = [23.7956, 90.3537];
 
   return (
-    <div className="h-full w-full relative">
+    <div className="absolute inset-0 z-0">
       <MapContainer
-        center={dhaka}
-        zoom={15}
+        center={MIRPUR_1}
+        zoom={16}
         zoomControl={false}
         className="h-full w-full"
       >
+        <MapController />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

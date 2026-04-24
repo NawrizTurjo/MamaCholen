@@ -30,8 +30,8 @@ const generateVehicles = (center: [number, number]): Vehicle[] => {
 };
 
 export default function App() {
-  const dhaka: [number, number] = [23.8103, 90.4125];
-  const [vehicles, setVehicles] = useState<Vehicle[]>(() => generateVehicles(dhaka));
+  const MIRPUR_1: [number, number] = [23.7956, 90.3537];
+  const [vehicles, setVehicles] = useState<Vehicle[]>(() => generateVehicles(MIRPUR_1));
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [destination, setDestination] = useState('Mirpur-1 to BUET');
   const [state, setState] = useState<AppState>('IDLE');
