@@ -1,0 +1,8 @@
+{
+  "name": "মামা, চলেন (Mama, Cholen)",
+  "description": "A ride-sharing MVP that brings back the lost ritual of bargaining to foster human connection through intentional friction.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
