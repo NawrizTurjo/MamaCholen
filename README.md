@@ -44,6 +44,11 @@ For the past decade, tech has obsessively removed friction from our lives—one-
 
 ---
 
+## Live Demo
+Experience the friction firsthand! Check out our live demo hosted on Vercel: [https://mama-cholen.vercel.app](https://mama-cholen.vercel.app)
+
+---
+
 ## 🚀 Run Locally
 
 Want to experience the friction yourself? Follow these steps to run the app on your machine.
