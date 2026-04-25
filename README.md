@@ -73,6 +73,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 ---
 
 ## 🏆 Team Dynamic Duo
-* **Nawriz Turjo** - Frontend Developer & UX Designer
+* **Nawriz Ahmed Turjo** - Frontend Developer & UX Designer
 * **Ahmed Sajid Hasan** - AI Integration & Backend Logic
 >Built against the clock (under 72 hours) for the Hacker Den **FRICTION** Hackathon. 
